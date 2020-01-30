@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	AppFilesDir = `.rabbit-dlog`
-	CfgFilename = `rabbit-dlog.conf`
+	appFilesDir = `.rabbit-dlog`
+	cfgFilename = `rabbit-dlog.conf`
 )
 
 type config struct {
@@ -39,9 +39,8 @@ func newConfig(appFilesDirPath string) (cfg *config, err error) {
 	if appFilesDirPath == "" {
 		if usr, err = user.Current(); err != nil {
 			return
-		} else {
-			appFilesDirPath = fmt.Sprintf("%s/%s", usr.HomeDir, AppFilesDir)
 		}
+		appFilesDirPath = fmt.Sprintf("%s/%s", usr.HomeDir, appFilesDir)
 	}
 	if err = cfg.read(appFilesDirPath); err != nil {
 		cfg.init()
@@ -63,7 +62,7 @@ func (cfg *config) create(appFilesDirPath string) (err error) {
 	if buf, err = json.MarshalIndent(cfg, "", "	"); err != nil {
 		return
 	}
-	cfg.Filepath = fmt.Sprintf("%s/%s", appFilesDirPath, CfgFilename)
+	cfg.Filepath = fmt.Sprintf("%s/%s", appFilesDirPath, cfgFilename)
 	if err = ioutil.WriteFile(cfg.Filepath, buf, 0600); err != nil {
 		return
 	}
@@ -88,7 +87,7 @@ func (cfg *config) init() {
 
 func (cfg *config) read(appFilesDirPath string) (err error) {
 	var buf []byte
-	fpath := fmt.Sprintf("%s/%s", appFilesDirPath, CfgFilename)
+	fpath := fmt.Sprintf("%s/%s", appFilesDirPath, cfgFilename)
 	if buf, err = ioutil.ReadFile(fpath); err != nil {
 		return err
 	}
